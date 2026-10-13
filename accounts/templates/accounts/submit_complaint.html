@@ -1,0 +1,377 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit a Complaint | Smart Grievance System</title>
+    <link rel="stylesheet" href="{% static 'accounts/style.css' %}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #fdf2f8, #ecfeff);
+            color: #263248;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(100deg, #4338ca, #7c3aed, #db2777);
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 5px 20px rgba(67, 56, 202, 0.2);
+        }
+
+        .navbar h2 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        .navbar div {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .navbar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .container {
+            width: 92%;
+            max-width: 900px;
+            margin: 35px auto;
+        }
+
+        .page-banner {
+            background: linear-gradient(120deg, #4f46e5, #7c3aed, #a855f7);
+            color: white;
+            padding: 30px;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-banner h1 {
+            margin: 0 0 12px;
+            font-size: 29px;
+        }
+
+        .page-banner p {
+            margin: 0;
+            line-height: 1.7;
+            max-width: 650px;
+        }
+
+        .page-banner::after {
+            content: "📝";
+            position: absolute;
+            right: 35px;
+            top: 15px;
+            font-size: 75px;
+            opacity: 0.2;
+        }
+
+        .form-card {
+            background: white;
+            padding: 32px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 12px 30px rgba(31, 41, 55, 0.09);
+            border: 1px solid #e5e7eb;
+            border-top: none;
+        }
+
+        .form-heading {
+            color: #4338ca;
+            font-size: 21px;
+            margin: 0 0 8px;
+        }
+
+        .form-description {
+            color: #64748b;
+            line-height: 1.6;
+            margin: 0 0 25px;
+        }
+
+        form p {
+            margin: 0 0 22px;
+        }
+
+        form p label {
+            display: block;
+            margin-bottom: 9px;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        form input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+        form select,
+        form textarea {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            background: #f8fafc;
+            color: #1e293b;
+            font-family: inherit;
+            font-size: 15px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        form input:focus,
+        form select:focus,
+        form textarea:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.13);
+            background: white;
+        }
+
+        form textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        form input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border: 2px dashed #c4b5fd;
+            border-radius: 10px;
+            background: #f5f3ff;
+            color: #475569;
+            cursor: pointer;
+        }
+
+        form input[type="checkbox"],
+        form input[type="radio"] {
+            accent-color: #7c3aed;
+        }
+
+        form .helptext {
+            display: block;
+            margin-top: 7px;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        form ul.errorlist {
+            color: #b91c1c;
+            background: #fef2f2;
+            padding: 10px 12px 10px 30px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-top: 28px;
+        }
+
+        .btn {
+            display: inline-block;
+            border: none;
+            padding: 13px 21px;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.06);
+        }
+
+        .btn-submit {
+            background: linear-gradient(100deg, #4f46e5, #7c3aed);
+            box-shadow: 0 5px 12px rgba(79, 70, 229, 0.2);
+        }
+
+        .btn-back {
+            background: linear-gradient(100deg, #ea580c, #f59e0b);
+        }
+
+        .tip-box {
+            margin-top: 25px;
+            padding: 18px 20px;
+            border-radius: 12px;
+            background: linear-gradient(100deg, #cffafe, #dbeafe);
+            border-left: 5px solid #0891b2;
+        }
+
+        .tip-box h3 {
+            margin: 0 0 7px;
+            color: #155e75;
+            font-size: 16px;
+        }
+
+        .tip-box p {
+            margin: 0;
+            color: #334155;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px 15px;
+            color: #64748b;
+            margin-top: 30px;
+            border-top: 1px solid #e2e8f0;
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 16px 5%;
+            }
+
+            .navbar h2 {
+                font-size: 19px;
+            }
+
+            .navbar div {
+                width: 100%;
+            }
+
+            .navbar a {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+
+            .container {
+                width: 94%;
+                margin: 22px auto;
+            }
+
+            .page-banner {
+                padding: 25px 20px;
+            }
+
+            .page-banner h1 {
+                font-size: 24px;
+                padding-right: 25px;
+            }
+
+            .page-banner::after {
+                right: 10px;
+                top: 12px;
+                font-size: 45px;
+            }
+
+            .form-card {
+                padding: 22px 18px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .form-actions .btn {
+                text-align: center;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <h2>🏛️ Smart Grievance System</h2>
+
+        <div>
+            <a href="{% url 'dashboard' %}">🏠 Dashboard</a>
+            <a href="{% url 'my_complaints' %}">📋 My Complaints</a>
+            <a href="{% url 'logout' %}">🚪 Logout</a>
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <section class="page-banner">
+            <h1>📝 Submit a Civic Complaint</h1>
+
+            <p>
+                Help improve your community by reporting civic issues.
+                Provide clear and accurate information so the responsible
+                department can investigate your complaint.
+            </p>
+        </section>
+
+        <section class="form-card">
+
+            <h2 class="form-heading">Complaint Details</h2>
+
+            <p class="form-description">
+                Fill in the details below. Please check your information before submitting.
+            </p>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-submit">
+                        🚀 Submit Complaint →
+                    </button>
+
+                    <a href="{% url 'dashboard' %}" class="btn btn-back">
+                        ← Back to Dashboard
+                    </a>
+                </div>
+            </form>
+
+            <div class="tip-box">
+                <h3>💡 Helpful tip</h3>
+                <p>
+                    Include the exact location and a clear description of the problem.
+                    If a photo is requested or supported by the form, it can help
+                    the responsible department understand the issue.
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        🏛️ Smart Public Grievance Resolution System
+        <br>
+        <small>Working together for a better community.</small>
+    </footer>
+
+</body>
+</html>
+

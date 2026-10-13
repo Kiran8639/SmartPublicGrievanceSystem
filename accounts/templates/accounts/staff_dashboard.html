@@ -1,0 +1,737 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department Staff Dashboard | Smart Grievance System</title>
+
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        min-height: 100vh;
+        color: #26304a;
+        background: linear-gradient(135deg, #edf2ff, #f8edff, #e7faff);
+        background-size: 300% 300%;
+        animation: backgroundMove 15s ease infinite;
+    }
+
+    @keyframes backgroundMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .navbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 20px 7%;
+        color: white;
+        background: linear-gradient(110deg, #4435b8, #7546d9, #bd48bb);
+        box-shadow: 0 5px 25px rgba(65, 49, 150, 0.2);
+    }
+
+    .navbar h2 {
+        font-size: 22px;
+        letter-spacing: 0.3px;
+    }
+
+    .navbar h2 span {
+        color: #8ff6ff;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 17px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 25px;
+        font-size: 14px;
+        transition: 0.3s;
+    }
+
+    .navbar a:hover {
+        background: white;
+        color: #5141bd;
+        transform: translateY(-2px);
+    }
+
+    .container {
+        width: min(1200px, 92%);
+        margin: 35px auto 60px;
+    }
+
+    .hero {
+        position: relative;
+        overflow: hidden;
+        padding: 35px;
+        border-radius: 24px;
+        color: white;
+        background: linear-gradient(120deg, #5144c8, #8150dd, #c34cbd);
+        box-shadow: 0 15px 35px rgba(88, 65, 191, 0.2);
+    }
+
+    .hero::after {
+        content: "🏢";
+        position: absolute;
+        right: 45px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 95px;
+        opacity: 0.22;
+    }
+
+    .hero-label {
+        display: inline-block;
+        margin-bottom: 12px;
+        padding: 7px 13px;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        border-radius: 25px;
+        background: rgba(255, 255, 255, 0.12);
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    .hero h1 {
+        margin-bottom: 12px;
+        font-size: clamp(26px, 4vw, 36px);
+    }
+
+    .hero p {
+        max-width: 650px;
+        color: #f0eaff;
+        line-height: 1.7;
+    }
+
+    .department-badge {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 16px;
+        border-radius: 12px;
+        color: #28205d;
+        background: #a6f6ff;
+        font-weight: 700;
+    }
+
+    .section-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 35px 0 20px;
+    }
+
+    .section-heading h2 {
+        color: #292c57;
+        font-size: 25px;
+    }
+
+    .complaint-count {
+        padding: 8px 14px;
+        border-radius: 20px;
+        color: #5141bd;
+        background: #e8e5ff;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .alert {
+        margin: 20px 0;
+        padding: 14px 18px;
+        border: 1px solid #b9e8ce;
+        border-radius: 12px;
+        color: #17683d;
+        background: #e7fff0;
+        line-height: 1.6;
+    }
+
+    .alert.error {
+        border-color: #ffc7cf;
+        color: #a3233b;
+        background: #fff0f2;
+    }
+
+    .complaint-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+    }
+
+    .card {
+        overflow: hidden;
+        padding: 25px;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 21px;
+        background: rgba(255, 255, 255, 0.85);
+        box-shadow: 0 10px 30px rgba(54, 57, 115, 0.08);
+        backdrop-filter: blur(12px);
+        transition: transform 0.3s, box-shadow 0.3s;
+        animation: cardAppear 0.5s ease both;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 17px 38px rgba(54, 57, 115, 0.14);
+    }
+
+    @keyframes cardAppear {
+        from {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .card-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .complaint-number {
+        display: inline-block;
+        margin-bottom: 9px;
+        color: #7774a6;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
+    .card h3 {
+        color: #2b2b59;
+        font-size: 20px;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    .priority,
+    .status {
+        display: inline-block;
+        padding: 7px 11px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .priority-low {
+        color: #17633c;
+        background: #d9fbe6;
+    }
+
+    .priority-medium {
+        color: #885600;
+        background: #fff0c2;
+    }
+
+    .priority-high {
+        color: #a73b1c;
+        background: #ffe0d4;
+    }
+
+    .priority-critical {
+        color: #a51039;
+        background: #ffdbe5;
+    }
+
+    .status-new {
+        color: #3154b7;
+        background: #e0e9ff;
+    }
+
+    .status-assigned {
+        color: #7844b4;
+        background: #efe0ff;
+    }
+
+    .status-in-progress {
+        color: #9a5a00;
+        background: #fff0ca;
+    }
+
+    .status-resolved {
+        color: #167344;
+        background: #d8f9e5;
+    }
+
+    .details {
+        display: grid;
+        gap: 14px;
+    }
+
+    .detail-row {
+        display: grid;
+        grid-template-columns: 115px minmax(0, 1fr);
+        gap: 10px;
+        line-height: 1.6;
+        font-size: 14px;
+    }
+
+    .detail-label {
+        color: #777b96;
+        font-weight: 600;
+    }
+
+    .detail-value {
+        color: #353957;
+        overflow-wrap: anywhere;
+        white-space: pre-line;
+    }
+
+    .photo-section {
+        margin-top: 20px;
+        padding-top: 18px;
+        border-top: 1px solid #ececff;
+    }
+
+    .photo-section h4 {
+        margin-bottom: 12px;
+        color: #4c4c78;
+    }
+
+    .complaint-photo {
+        display: block;
+        width: 100%;
+        max-height: 260px;
+        object-fit: cover;
+        border-radius: 13px;
+        border: 1px solid #e5e5f7;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .complaint-photo:hover {
+        transform: scale(1.01);
+    }
+
+    .no-photo {
+        padding: 14px;
+        border-radius: 10px;
+        color: #777b96;
+        background: #f5f5fc;
+        font-size: 13px;
+    }
+
+    .update-section {
+        margin-top: 23px;
+        padding: 20px;
+        border: 1px solid #e8e5ff;
+        border-radius: 15px;
+        background: linear-gradient(135deg, #f8f7ff, #f1fbff);
+    }
+
+    .update-section h4 {
+        margin-bottom: 15px;
+        color: #35316e;
+        font-size: 16px;
+    }
+
+    .update-form label {
+        display: block;
+        margin-bottom: 8px;
+        color: #565979;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .update-form select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #d8d5f5;
+        border-radius: 10px;
+        outline: none;
+        color: #303454;
+        background: white;
+        font-size: 14px;
+    }
+
+    .update-form select:focus {
+        border-color: #7554d8;
+        box-shadow: 0 0 0 3px rgba(117, 84, 216, 0.12);
+    }
+
+    .update-button {
+        width: 100%;
+        margin-top: 13px;
+        padding: 12px 16px;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        background: linear-gradient(100deg, #5545c4, #a34acb);
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .update-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(101, 67, 195, 0.25);
+    }
+
+    .resolved-message {
+        margin-top: 20px;
+        padding: 15px;
+        border: 1px solid #bdebd0;
+        border-radius: 12px;
+        color: #17683d;
+        background: #eafff1;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .empty-state {
+        grid-column: 1 / -1;
+        padding: 55px 25px;
+        border: 1px dashed #c9c7ee;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.8);
+        text-align: center;
+    }
+
+    .empty-icon {
+        margin-bottom: 15px;
+        font-size: 55px;
+    }
+
+    .empty-state h3 {
+        margin-bottom: 10px;
+        color: #35316e;
+    }
+
+    .empty-state p {
+        color: #777b96;
+        line-height: 1.7;
+    }
+
+    .footer {
+        padding: 20px;
+        color: #777b96;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    @media (max-width: 850px) {
+        .complaint-list {
+            grid-template-columns: 1fr;
+        }
+
+        .hero::after {
+            right: 20px;
+            font-size: 65px;
+        }
+    }
+
+    @media (max-width: 520px) {
+        .navbar {
+            align-items: flex-start;
+            flex-direction: column;
+            padding: 18px 5%;
+        }
+
+        .navbar h2 {
+            font-size: 19px;
+        }
+
+        .container {
+            width: 92%;
+            margin-top: 22px;
+        }
+
+        .hero {
+            padding: 25px 20px;
+        }
+
+        .hero::after {
+            right: 12px;
+            top: 25px;
+            transform: none;
+            font-size: 43px;
+        }
+
+        .hero h1 {
+            max-width: 75%;
+            font-size: 25px;
+        }
+
+        .hero p {
+            font-size: 14px;
+        }
+
+        .section-heading h2 {
+            font-size: 21px;
+        }
+
+        .card {
+            padding: 19px;
+        }
+
+        .card-top {
+            flex-direction: column;
+        }
+
+        .detail-row {
+            grid-template-columns: 95px minmax(0, 1fr);
+            font-size: 13px;
+        }
+
+        .update-section {
+            padding: 15px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            scroll-behavior: auto !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+</style>
+
+
+</head>
+
+<body>
+
+
+<nav class="navbar">
+    <h2>SMART <span style="color: #8ff6ff;">GRIEVANCE</span> SYSTEM</h2>
+
+    <div class="nav-links">
+        <a href="{% url 'staff_dashboard' %}">🏠 Dashboard</a>
+        <a href="{% url 'logout' %}">↪ Logout</a>
+    </div>
+</nav>
+
+<main class="container">
+
+    <section class="hero">
+        <span class="hero-label">Department Portal</span>
+
+        <h1>Department Staff Dashboard</h1>
+
+        <p>
+            Review public complaints assigned to your department,
+            track their progress, and update their status as work proceeds.
+        </p>
+
+        {% if department %}
+        <div class="department-badge">
+            🏢 {{ department.name }}
+        </div>
+        {% endif %}
+    </section>
+
+    {% if error %}
+    <div class="alert error">
+        ⚠️ {{ error }}
+    </div>
+    {% endif %}
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert {% if 'error' in message.tags %}error{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="section-heading">
+        <h2>📋 Department Complaints</h2>
+
+        <span class="complaint-count">
+            {{ complaints|length }} Complaint{{ complaints|length|pluralize }}
+        </span>
+    </div>
+
+    <div class="complaint-list">
+
+        {% if complaints %}
+
+            {% for complaint in complaints %}
+
+            <article class="card">
+
+                <div class="card-top">
+                    <div>
+                        <span class="complaint-number">
+                            COMPLAINT #{{ complaint.id }}
+                        </span>
+
+                        <h3>{{ complaint.title }}</h3>
+                    </div>
+
+                    <span class="priority
+                        {% if complaint.priority == 'LOW' %}priority-low
+                        {% elif complaint.priority == 'MEDIUM' %}priority-medium
+                        {% elif complaint.priority == 'HIGH' %}priority-high
+                        {% elif complaint.priority == 'CRITICAL' %}priority-critical
+                        {% endif %}">
+                        {{ complaint.get_priority_display }}
+                    </span>
+                </div>
+
+                <div class="details">
+
+                    <div class="detail-row">
+                        <span class="detail-label">👤 Citizen</span>
+                        <span class="detail-value">{{ complaint.citizen.username }}</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">📝 Description</span>
+                        <span class="detail-value">{{ complaint.description }}</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">📍 Location</span>
+                        <span class="detail-value">{{ complaint.location }}</span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">📊 Status</span>
+                        <span>
+                            <span class="status
+                                {% if complaint.status == 'NEW' %}status-new
+                                {% elif complaint.status == 'ASSIGNED' %}status-assigned
+                                {% elif complaint.status == 'IN_PROGRESS' %}status-in-progress
+                                {% elif complaint.status == 'RESOLVED' %}status-resolved
+                                {% endif %}">
+                                {{ complaint.get_status_display }}
+                            </span>
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <span class="detail-label">🕒 Submitted</span>
+                        <span class="detail-value">
+                            {{ complaint.created_at|date:"d M Y, h:i A" }}
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="photo-section">
+                    <h4>📷 Complaint Photo</h4>
+
+                    {% if complaint.photo %}
+                    <a href="{{ complaint.photo.url }}" target="_blank" rel="noopener">
+                        <img
+                            src="{{ complaint.photo.url }}"
+                            alt="Photo for complaint {{ complaint.id }}"
+                            class="complaint-photo"
+                            loading="lazy">
+                    </a>
+                    {% else %}
+                    <div class="no-photo">
+                        No photo was uploaded for this complaint.
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if complaint.status != 'RESOLVED' %}
+
+                <div class="update-section">
+                    <h4>🔄 Update Complaint Status</h4>
+
+                    <form
+                        method="post"
+                        action="{% url 'update_complaint_status' complaint.id %}"
+                        class="update-form">
+
+                        {% csrf_token %}
+
+                        <label for="status-{{ complaint.id }}">
+                            Select the new status
+                        </label>
+
+                        <select
+                            name="status"
+                            id="status-{{ complaint.id }}"
+                            required>
+
+                            <option value="">Choose a status</option>
+
+                            <option value="IN_PROGRESS"
+                                {% if complaint.status == 'IN_PROGRESS' %}selected{% endif %}>
+                                In Progress
+                            </option>
+
+                            <option value="RESOLVED">
+                                Resolved
+                            </option>
+
+                        </select>
+
+                        <button type="submit" class="update-button">
+                            Update Status →
+                        </button>
+
+                    </form>
+                </div>
+
+                {% else %}
+
+                <div class="resolved-message">
+                    ✅ This complaint has been resolved.
+                </div>
+
+                {% endif %}
+
+            </article>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty-state">
+                <div class="empty-icon">🏙️</div>
+                <h3>No Complaints Yet</h3>
+                <p>
+                    There are currently no complaints for your department.
+                    New complaints will appear here when available.
+                </p>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</main>
+
+<footer class="footer">
+    Smart Public Grievance Resolution System · Department Portal
+</footer>
+
+</body>
+</html>

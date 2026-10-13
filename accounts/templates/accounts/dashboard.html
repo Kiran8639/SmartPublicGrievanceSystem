@@ -1,0 +1,433 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citizen Dashboard | Smart Grievance System</title>
+    <link rel="stylesheet" href="{% static 'accounts/style.css' %}">
+
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #fdf2f8, #ecfeff);
+            color: #263248;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(100deg, #4338ca, #7c3aed, #db2777);
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 5px 20px rgba(67, 56, 202, 0.2);
+        }
+
+        .navbar h2 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        .navbar div {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .navbar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 35px auto;
+        }
+
+        .welcome-card {
+            background: linear-gradient(120deg, #4f46e5, #7c3aed, #a855f7);
+            color: white;
+            padding: 38px;
+            border-radius: 22px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(79, 70, 229, 0.2);
+        }
+
+        .welcome-card::after {
+            content: "🏛️";
+            position: absolute;
+            right: 45px;
+            top: 20px;
+            font-size: 100px;
+            opacity: 0.17;
+        }
+
+        .welcome-card h1 {
+            margin: 0 0 15px;
+            font-size: 32px;
+        }
+
+        .welcome-card p {
+            margin: 8px 0;
+            line-height: 1.7;
+            max-width: 700px;
+        }
+
+        .welcome-label {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.18);
+            padding: 7px 13px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .section-heading {
+            margin: 38px 0 8px;
+            color: #312e81;
+            font-size: 27px;
+        }
+
+        .section-description {
+            color: #64748b;
+            margin-bottom: 24px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+            margin-top: 22px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 28px 24px;
+            border-radius: 18px;
+            box-shadow: 0 7px 22px rgba(31, 41, 55, 0.07);
+            border: 1px solid #e5e7eb;
+            transition: transform 0.25s, box-shadow 0.25s;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 15px 30px rgba(31, 41, 55, 0.12);
+        }
+
+        .feature-icon {
+            width: 58px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            font-size: 29px;
+            margin-bottom: 18px;
+        }
+
+        .icon-purple {
+            background: #ede9fe;
+        }
+
+        .icon-green {
+            background: #dcfce7;
+        }
+
+        .icon-orange {
+            background: #ffedd5;
+        }
+
+        .icon-blue {
+            background: #dbeafe;
+        }
+
+        .feature-card h3 {
+            color: #1e293b;
+            margin: 0 0 12px;
+            font-size: 20px;
+        }
+
+        .feature-card p {
+            color: #64748b;
+            line-height: 1.7;
+            margin: 0 0 24px;
+            flex-grow: 1;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 17px;
+            background: linear-gradient(100deg, #4f46e5, #7c3aed);
+            color: white;
+            text-decoration: none;
+            border-radius: 9px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            filter: brightness(1.08);
+            transform: translateY(-2px);
+        }
+
+        .btn-green {
+            background: linear-gradient(100deg, #059669, #10b981);
+        }
+
+        .btn-orange {
+            background: linear-gradient(100deg, #ea580c, #f59e0b);
+        }
+
+        .btn-blue {
+            background: linear-gradient(100deg, #0284c7, #4f46e5);
+        }
+
+        .info-banner {
+            margin-top: 30px;
+            padding: 22px 25px;
+            border-radius: 15px;
+            background: linear-gradient(100deg, #cffafe, #dbeafe);
+            border-left: 5px solid #0891b2;
+        }
+
+        .info-banner h3 {
+            margin: 0 0 8px;
+            color: #155e75;
+        }
+
+        .info-banner p {
+            margin: 0;
+            line-height: 1.7;
+            color: #334155;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px 15px;
+            color: #64748b;
+            margin-top: 35px;
+            border-top: 1px solid #e2e8f0;
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        @media (max-width: 900px) {
+            .welcome-card::after {
+                right: 20px;
+                font-size: 75px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 16px 5%;
+            }
+
+            .navbar h2 {
+                font-size: 19px;
+            }
+
+            .navbar div {
+                width: 100%;
+            }
+
+            .navbar a {
+                padding: 8px 10px;
+                font-size: 14px;
+            }
+
+            .container {
+                width: 92%;
+                margin: 22px auto;
+            }
+
+            .welcome-card {
+                padding: 27px 22px;
+            }
+
+            .welcome-card h1 {
+                font-size: 25px;
+            }
+
+            .welcome-card::after {
+                right: 10px;
+                top: 10px;
+                font-size: 55px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .section-heading {
+                font-size: 23px;
+            }
+
+            .feature-card {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+
+    <nav class="navbar">
+        <h2>🏛️ Smart Grievance System</h2>
+
+        <div>
+            <a href="{% url 'dashboard' %}">🏠 Dashboard</a>
+            <a href="{% url 'departments' %}">🏢 Departments</a>
+            <a href="{% url 'my_complaints' %}">📋 My Complaints</a>
+            <a href="{% url 'logout' %}">🚪 Logout</a>
+            <a href="{% url 'notifications' %}">
+                🔔 Notifications
+                {% if unread_count > 0 %}
+                <span class="notification-count">{{ unread_count }}</span>
+                {% endif %}
+            </a>
+
+        </div>
+    </nav>
+
+    <main class="container">
+
+        <section class="welcome-card">
+            <span class="welcome-label">CITIZEN PORTAL</span>
+
+            <h1>Welcome, {{ request.user.username }}! 👋</h1>
+
+            <p>
+                Welcome to your Smart Public Grievance Resolution System.
+                Your voice matters, and your participation helps build a better community.
+            </p>
+
+            <p>
+                Report civic issues, follow complaint progress, and help make your
+                neighbourhood cleaner, safer, and better.
+            </p>
+        </section>
+
+        <h2 class="section-heading">Explore Your Services ✨</h2>
+
+        <p class="section-description">
+            Choose a service below to report an issue, explore departments, or track your complaints.
+        </p>
+
+        <section class="features">
+
+            <div class="feature-card">
+                <div class="feature-icon icon-purple">📝</div>
+
+                <h3>Submit a Complaint</h3>
+
+                <p>
+                    Report potholes, water supply problems, sanitation issues,
+                    damaged roads, and other civic concerns.
+                </p>
+
+                <a class="btn" href="{% url 'submit_complaint' %}">
+                    Report an Issue →
+                </a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon icon-green">📋</div>
+
+                <h3>My Complaints</h3>
+
+                <p>
+                    View your submitted complaints, check their current status,
+                    and follow updates from the responsible department.
+                </p>
+
+                <a class="btn btn-green" href="{% url 'my_complaints' %}">
+                    View Complaints →
+                </a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon icon-orange">📍</div>
+
+                <h3>Improve Your Community</h3>
+
+                <p>
+                    Help local authorities identify public problems and work
+                    towards a cleaner, safer, and more organised community.
+                </p>
+
+                <a class="btn btn-orange" href="{% url 'submit_complaint' %}">
+                    Get Started →
+                </a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon icon-blue">🏢</div>
+
+                <h3>Civic Departments</h3>
+
+                <p>
+                    Explore the seven civic departments, understand their responsibilities,
+                    and find the appropriate department for your public issue.
+                </p>
+
+                <a class="btn btn-blue" href="{% url 'departments' %}">
+                    View Departments →
+                </a>
+            </div>
+
+        </section>
+
+        <section class="info-banner">
+            <h3>💡 How it works</h3>
+
+            <p>
+                Submit a complaint with the issue details and location.
+                The relevant department can review it and update its status.
+                You can then visit <strong>My Complaints</strong> to track progress.
+                Visit <strong>Departments</strong> to learn about the different civic services.
+            </p>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        🏛️ Smart Public Grievance Resolution System
+        <br>
+        <small>Working together for a better community.</small>
+    </footer>
+
+
+</body>
+
+</html>
