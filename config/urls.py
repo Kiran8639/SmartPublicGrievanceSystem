@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-
+from accounts import views
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -25,6 +25,7 @@ from django.shortcuts import redirect
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('service-worker.js', views.service_worker, name='service_worker'),
     path('', lambda request: redirect('login')),
     path('', include('accounts.urls')),
 ]

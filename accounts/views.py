@@ -5,7 +5,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_POST
-
+from django.http import HttpResponse
 from .forms import CitizenRegistrationForm
 from .complaint_forms import ComplaintForm
 from .models import Complaint, Department, User, ComplaintStatusHistory, Notification
@@ -315,6 +315,25 @@ def notifications_list(request):
         {'notifications': notifications}
     )
 
+def service_worker(request):
+        js_code = """
+    self.addEventListener('install', function(event) {
+        self.skipWaiting();
+    });
+
+    self.addEventListener('activate', function(event) {
+        event.waitUntil(self.clients.claim());
+    });
+
+    self.addEventListener('fetch', function(event) {
+        if (event.request.method === 'GET') {
+            event.respondWith(fetch(event.request));
+        }
+    });
+    """
+        response = HttpResponse(js_code, content_type='application/javascript')
+        response['Service-Worker-Allowed'] = '/'
+        return response
 
 
 
