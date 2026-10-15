@@ -432,6 +432,44 @@
             box-shadow: 0 0 0 3px rgba(84, 244, 255, 0.12);
         }
 
+        .password-input-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .password-input-wrapper input[type="password"],
+        .password-input-wrapper input[type="text"] {
+            padding-right: 48px !important;
+        }
+
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 12px;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .toggle-password:hover {
+            background: rgba(84, 244, 255, 0.12);
+        }
+
+        .toggle-password:focus-visible {
+            outline: 2px solid var(--cyan);
+            outline-offset: 2px;
+        }
+
         .login-card form input::placeholder {
             color: #b9bcdf;
         }
@@ -679,6 +717,49 @@
     <footer class="footer">
         © Smart Public Grievance Resolution System
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordInputs = document.querySelectorAll(
+                '.login-card form input[type="password"]'
+            );
+
+            passwordInputs.forEach(function (passwordInput) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'password-input-wrapper';
+
+                passwordInput.parentNode.insertBefore(wrapper, passwordInput);
+                wrapper.appendChild(passwordInput);
+
+                const toggleButton = document.createElement('button');
+                toggleButton.type = 'button';
+                toggleButton.className = 'toggle-password';
+                toggleButton.textContent = '👁️';
+                toggleButton.setAttribute('aria-label', 'Show password');
+                toggleButton.setAttribute('aria-pressed', 'false');
+                toggleButton.title = 'Show password';
+
+                wrapper.appendChild(toggleButton);
+
+                toggleButton.addEventListener('click', function () {
+                    const isPasswordHidden = passwordInput.type === 'password';
+
+                    passwordInput.type = isPasswordHidden ? 'text' : 'password';
+                    toggleButton.textContent = isPasswordHidden ? '🙈' : '👁️';
+                    toggleButton.setAttribute(
+                        'aria-label',
+                        isPasswordHidden ? 'Hide password' : 'Show password'
+                    );
+                    toggleButton.setAttribute(
+                        'aria-pressed',
+                        isPasswordHidden ? 'true' : 'false'
+                    );
+                    toggleButton.title = isPasswordHidden ? 'Hide password' : 'Show password';
+                });
+            });
+        });
+    </script>
+
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
